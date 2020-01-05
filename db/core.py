@@ -1,8 +1,6 @@
-import functools
-
 from sqlalchemy.sql import ClauseElement
 
-from db.classes import Session, User
+from db.classes import Session
 
 
 def db_read(function):
@@ -11,11 +9,13 @@ def db_read(function):
     :param function: function where the operation is performed
     :return: the wrapper
     """
+
     def wrapper(*args, **kwargs):
         session = Session()
         ret = function(session, *args, **kwargs)
         session.close()
         return ret
+
     return wrapper
 
 
@@ -25,12 +25,14 @@ def db_write(function):
     :param function: function where the operation is performed
     :return: the wrapper
     """
+
     def wrapper(*args, **kwargs):
         session = Session()
         ret = function(session, *args, **kwargs)
         session.commit()
         session.close()
         return ret
+
     return wrapper
 
 
