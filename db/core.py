@@ -51,7 +51,7 @@ def get_or_create(session, model, defaults=None, **kwargs):
 def create_user(function):
     def wrapper(*args, **kwargs):
         session = Session()
-        user = args[0]
+        user = args[0].from_user
         already_registered = get_or_create(session, User(user.id))[1]
         ret = function(already_registered, *args, **kwargs)
         return ret
