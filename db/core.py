@@ -1,6 +1,6 @@
 from sqlalchemy.sql import ClauseElement
 
-from db.classes import Session
+from db.classes import Session, User
 
 
 def db_read(function):
@@ -46,3 +46,14 @@ def get_or_create(session, model, defaults=None, **kwargs):
         instance = model(**params)
         session.add(instance)
         return instance, True
+
+
+def create_user(function):
+    def wrapper(*args, **kwargs):
+        session = Session()
+        user = args[0]
+        already_registered = get_or_create(session, User(user.id))[1]
+        ret = function(already_registered, *args, **kwargs)
+        return ret
+
+    return wrapper
