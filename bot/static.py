@@ -26,8 +26,8 @@ BRUH = ["bruh", "bruhh", "bruuh", "bRuh", "BRUH"]
 
 def VERIFY_KEYBOARD(audio):
     keyboard = types.InlineKeyboardMarkup()
-    keyboard.add(types.InlineKeyboardButton("Verify", callback_data=f"ver_{audio.id}"))
-    keyboard.add(types.InlineKeyboardButton("Remove", callback_data=f"rem_{audio.id}"))
+    keyboard.add(types.InlineKeyboardButton("Verify", callback_data=f"ver_{audio}"))
+    keyboard.add(types.InlineKeyboardButton("Remove", callback_data=f"rem_{audio}"))
 
 
 DNE = -1
