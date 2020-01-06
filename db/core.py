@@ -52,9 +52,10 @@ def create_user(function):
     def wrapper(*args, **kwargs):
         session = Session()
         user = args[0].from_user
-        print(user)
-        already_registered = get_or_create(session, User, id=user.id)[1]
-        ret = function(already_registered, *args, **kwargs)
+        not_registered = get_or_create(session, User, id=user.id)[1]
+        session.commit()
+        session.close()
+        ret = function(not_registered, *args, **kwargs)
         return ret
 
     return wrapper

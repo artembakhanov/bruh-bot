@@ -21,8 +21,8 @@ def hello_message(m):
 
 @bot.message_handler(commands=['start'])
 @create_user
-def start_message(already_registered, m):
-    if already_registered:
-        bot.send_message(m.chat.id, "Hello! You are already in!")
-    else:
+def start_message(not_registered, m):
+    if not_registered:
         bot.send_message(m.chat.id, "Hello! You are new here... Welcome!")
+    else:
+        bot.send_message(m.chat.id, "Hello! You are already in!")
