@@ -11,7 +11,7 @@ def START_MESSAGE(user, not_registered):
 
 DNE_MESSAGE = f"Sorry, but you are not in our databases. Please, type /start"
 AUDION_MESSAGE = f"Send me your bruh audio!"
-RECORDED_MESSAGE = f"Your bruh has been recorded. It will be made (become) public after verification."
+RECORDED_MESSAGE = f"Your bruh has been recorded. It will become public after verification."
 
 COMMANDS = ["bruh", "bruh\U0001F50A", "Record my bruh\U0001F3A4"]
 
