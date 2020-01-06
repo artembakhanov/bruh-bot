@@ -43,7 +43,7 @@ def verify_audio(session, audio_id, verified=True):
 @bot.message_handler(commands=['start'])
 @create_user
 def start_message(not_registered, m):
-    bot.send_message(m.chat.id, START_MESSAGE(m.from_user, not_registered), reply_markup=COMMANDS_KEYBOARD)
+    bot.send_message(m.chat.id, START_MESSAGE(m.from_user, not_registered), reply_markup=COMMANDS_KEYBOARD(m.chat.type))
 
 
 @bot.message_handler(func=lambda m: m.text in [commands[0], '/bruht'])
@@ -72,7 +72,7 @@ def recorded_audio_message(m):
     audio_id = create_audio(m)
     send_for_verification(audio_id)
     change_user_state(m.from_user.id, DEFAULT_STATE)
-    bot.send_message(m.chat.id, RECORDED_MESSAGE, reply_markup=COMMANDS_KEYBOARD)
+    bot.send_message(m.chat.id, RECORDED_MESSAGE, reply_markup=COMMANDS_KEYBOARD(m.chat.type))
 
 
 @bot.message_handler(func=lambda m: get_user_state(m.from_user.id) == DNE,
