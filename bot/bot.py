@@ -28,7 +28,7 @@ def create_audio(session, message):
     return audio.id
 
 
-@db_write
+@db_read
 def random_audio(session):
     return random.choice(session.query(Audio).filter_by(verified=True).all()).id
 
@@ -110,3 +110,11 @@ def remove(call):
     bot.send_voice(audio.user_id, audio.id,
                    caption=f"Unfortunately, your bruh *{audio.id[:4]}..{audio_id[-4:]}* has not been approved. Try again.",
                    parse_mode="markdown")
+
+
+@bot.inline_handler(func=lambda query: True)
+def inline(query):
+    audio_id = random_audio()
+    audio_url = bot.get_file_url(audio_id)
+    res = types.InlineQueryResultVoice(audio_id, audio_url, "bruh")
+    bot.answer_inline_query(query.id, [res], cache_time=0)
