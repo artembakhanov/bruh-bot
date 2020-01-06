@@ -97,7 +97,7 @@ def verify(call):
     audio = verify_audio(audio_id)
     bot.edit_message_caption("Verified!", chat_id=call.message.chat.id, message_id=call.message.message_id,
                              reply_markup=VERIFY_KEYBOARD(audio_id))
-    bot.send_voice(audio.user_id, audio.id, caption=f"Your audio *{audio.id[4:]}..{audio_id[:4]}* has been approved!",
+    bot.send_voice(audio.user_id, audio.id, caption=f"Your audio *{audio.id[:4]}..{audio_id[-4:]}* has been approved!",
                    parse_mode="markdown")
 
 
@@ -108,5 +108,5 @@ def remove(call):
     bot.edit_message_caption("Removed.", chat_id=call.message.chat.id, message_id=call.message.message_id,
                              reply_markup=VERIFY_KEYBOARD(audio_id))
     bot.send_voice(audio.user_id, audio.id,
-                   caption=f"Unfortunately, your bruh *{audio.id[:4]}..{audio_id[:-4]}* has not been approved. Try again.",
+                   caption=f"Unfortunately, your bruh *{audio.id[:4]}..{audio_id[-4:]}* has not been approved. Try again.",
                    parse_mode="markdown")
