@@ -70,7 +70,13 @@ def bruh_audiomessage(m):
 @create_user
 def record_audio_message(not_registered, m):
     change_user_state(m.from_user.id, WAITING_FOR_AUDIO)
-    bot.send_message(m.chat.id, AUDION_MESSAGE, reply_markup=HIDE_KEYBOARD)
+    bot.send_message(m.chat.id, AUDION_MESSAGE, reply_markup=CANCEL_KEYBOARD(m.chat.type))
+
+
+@bot.message_handler(func=lambda m: m.text == CANCEL)
+def cancel_recording_audio_message(m):
+    change_user_state(m.from_user.id, DEFAULT_STATE)
+    bot.send_message(m.chat.id, random.choice(BRUH), reply_markup=COMMANDS_KEYBOARD(m.chat.type))
 
 
 def send_for_verification(audio_id):
