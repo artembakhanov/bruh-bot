@@ -10,6 +10,7 @@ def START_MESSAGE(user, not_registered):
 
 
 DNE_MESSAGE = f"Sorry, but you are not in our databases. Please, type /start"
+AUDION_MESSAGE = f"Send me your bruh audio!"
 
 commands = ["bruh", "bruh\U0001F50A", "Record my bruh\U0001F3A4"]
 
@@ -22,3 +23,5 @@ BRUH = ["bruh", "bruhh", "bruuh", "bRuh", "BRUH"]
 DNE = -1
 DEFAULT_STATE = 0
 WAITING_FOR_AUDIO = 1
+
+ALL_CONTENT_TYPES = ['audio', 'video', 'document', 'text', 'location', 'contact', 'sticker']
