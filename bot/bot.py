@@ -115,6 +115,8 @@ def remove(call):
 @bot.inline_handler(func=lambda query: True)
 def inline(query):
     audio_id = random_audio()
-    audio_url = bot.get_file_url(audio_id)
+    file = bot.get_file(audio_id)
+    print(file)
+    audio_url = f"https://api.telegram.org/file/bot{TOKEN}/{file.file_path}"
     res = types.InlineQueryResultVoice(audio_id, audio_url, "bruh")
     bot.answer_inline_query(query.id, [res], cache_time=0)
