@@ -45,7 +45,7 @@ def bruh_message(m):
 
 @bot.message_handler(func=lambda m: m.text == commands[1])
 def bruh_message(m):
-    bot.send_voice(m.chat.id, random_audio)
+    bot.send_voice(m.chat.id, random_audio())
 
 
 @bot.message_handler(func=lambda m: m.text == commands[2])
