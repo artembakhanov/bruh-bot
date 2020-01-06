@@ -46,7 +46,7 @@ def start_message(not_registered, m):
     bot.send_message(m.chat.id, START_MESSAGE(m.from_user, not_registered), reply_markup=COMMANDS_KEYBOARD(m.chat.type))
 
 
-@bot.message_handler(func=lambda m: m.text == commands[0])
+@bot.message_handler(func=lambda m: m.text == COMMANDS[0])
 def bruh_message(m):
     bot.send_message(m.chat.id, random.choice(BRUH))
 
@@ -56,7 +56,7 @@ def bruh_message(m):
     bot.send_message(m.chat.id, random.choice(BRUH))
 
 
-@bot.message_handler(func=lambda m: m.text == commands[1])
+@bot.message_handler(func=lambda m: m.text == COMMANDS[1])
 def bruh_audiomessage(m):
     bot.send_voice(m.chat.id, random_audio())
 
@@ -66,7 +66,7 @@ def bruh_audiomessage(m):
     bot.send_voice(m.chat.id, random_audio())
 
 
-@bot.message_handler(func=lambda m: m.text == commands[2])
+@bot.message_handler(func=lambda m: m.text == COMMANDS[2])
 @create_user
 def record_audio_message(not_registered, m):
     change_user_state(m.from_user.id, WAITING_FOR_AUDIO)

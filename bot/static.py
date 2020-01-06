@@ -13,12 +13,12 @@ DNE_MESSAGE = f"Sorry, but you are not in our databases. Please, type /start"
 AUDION_MESSAGE = f"Send me your bruh audio!"
 RECORDED_MESSAGE = f"Your bruh has been recorded. It will be made (become) public after verification."
 
-commands = ["bruh", "bruh\U0001F50A", "Record my bruh\U0001F3A4"]
+COMMANDS = ["bruh", "bruh\U0001F50A", "Record my bruh\U0001F3A4"]
 
 
 def COMMANDS_KEYBOARD(chat_type):
     keyboard = types.ReplyKeyboardMarkup(row_width=2, selective=True)
-    keyboard.add(*commands)
+    keyboard.add(*COMMANDS)
     return keyboard if chat_type == "private" else HIDE_KEYBOARD
 
 
