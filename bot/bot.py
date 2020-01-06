@@ -32,6 +32,12 @@ def random_audio(session):
     return random.choice(session.query(Audio).filter_by(verified=True).all()).id
 
 
+@db_write
+def verify_audio(session, audio_id, verified=True):
+    audio = session.query(Audio).filter_by(id=audio_id).first()
+    audio.verified = verified
+
+
 @bot.message_handler(commands=['start'])
 @create_user
 def start_message(not_registered, m):
@@ -54,9 +60,14 @@ def bruh_audiomessage(m):
     bot.send_message(m.chat.id, AUDION_MESSAGE, reply_markup=HIDE_KEYBOARD)
 
 
+def send_for_verification(audio):
+    bot.send_voice(ADMIN_GROUP, audio.file_id, caption="Verify, please", reply_markup=VERIFY_KEYBOARD(audio))
+
+
 @bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
 def record_message(m):
     create_audio(m)
+    send_for_verification(m)
     change_user_state(m.from_user.id, DEFAULT_STATE)
     bot.send_message(m.chat.id, RECORDED_MESSAGE, reply_markup=COMMANDS_KEYBOARD)
 
@@ -65,3 +76,17 @@ def record_message(m):
                      content_types=ALL_CONTENT_TYPES)
 def dne_message(m):
     bot.send_message(m.chat.id, DNE_MESSAGE)
+
+
+@bot.callback_query_handler(func=lambda call: call.data[0:4] == "ver_")
+def verify(call):
+    audio_id = call.data[4:]
+    verify_audio(audio_id)
+    bot.edit_message_caption("Verified!", message_id=call.message.message_id)
+
+
+@bot.callback_query_handler(func=lambda call: call.data[0:4] == "rem_")
+def verify(call):
+    audio_id = call.data[4:]
+    verify_audio(audio_id)
+    bot.edit_message_caption("Removed.", message_id=call.message.message_id)
