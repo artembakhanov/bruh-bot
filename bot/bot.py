@@ -25,6 +25,7 @@ def change_user_state(session, user_id: int, new_state: int):
 def create_audio(session, message):
     audio = Audio(message.voice.file_id, message.from_user.id, verified=True)
     session.add(audio)
+    return audio
 
 
 @db_write
@@ -66,8 +67,8 @@ def send_for_verification(audio):
 
 @bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
 def record_message(m):
-    create_audio(m)
-    send_for_verification(m)
+    audio = create_audio(m)
+    send_for_verification(audio)
     change_user_state(m.from_user.id, DEFAULT_STATE)
     bot.send_message(m.chat.id, RECORDED_MESSAGE, reply_markup=COMMANDS_KEYBOARD)
 
