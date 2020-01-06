@@ -37,6 +37,7 @@ def random_audio(session):
 def verify_audio(session, audio_id, verified=True):
     audio = session.query(Audio).filter_by(id=audio_id).first()
     audio.verified = verified
+    return audio
 
 
 @bot.message_handler(commands=['start'])
@@ -82,14 +83,19 @@ def dne_message(m):
 @bot.callback_query_handler(func=lambda call: call.data[0:4] == "ver_")
 def verify(call):
     audio_id = call.data[4:]
-    verify_audio(audio_id)
+    audio = verify_audio(audio_id)
     bot.edit_message_caption("Verified!", chat_id=call.message.chat.id, message_id=call.message.message_id,
                              reply_markup=VERIFY_KEYBOARD(audio_id))
+    bot.send_voice(audio.user_id, audio.id, caption=f"Your audio **{audio.id}** has been approved!",
+                   parse_mode="markdown")
 
 
 @bot.callback_query_handler(func=lambda call: call.data[0:4] == "rem_")
-def verify(call):
+def remove(call):
     audio_id = call.data[4:]
-    verify_audio(audio_id)
+    audio = verify_audio(audio_id, False)
     bot.edit_message_caption("Removed.", chat_id=call.message.chat.id, message_id=call.message.message_id,
                              reply_markup=VERIFY_KEYBOARD(audio_id))
+    bot.send_voice(audio.user_id, audio.id,
+                   caption=f"Unfortunately, your bruh **{audio.id}** has not been approved. Try again.",
+                   parse_mode="markdown")
