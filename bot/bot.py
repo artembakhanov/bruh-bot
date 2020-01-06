@@ -43,7 +43,7 @@ def bruh_audiomessage(m):
     bot.send_message(m.chat.id, AUDION_MESSAGE, reply_markup=HIDE_KEYBOARD)
 
 
-@bot.message_handler(content_types=['audio'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
+@bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
 def record_message(m):
     print(m)
 
