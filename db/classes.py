@@ -16,8 +16,8 @@ class User(base):
     join_date = Column(DateTime)
     banned = Column(Boolean)
 
-    def __init__(self, user_id, *, join_date=None, banned=False) -> None:
-        self.id = user_id
+    def __init__(self, id_, *, join_date=None, banned=False) -> None:
+        self.id = id_
         self.join_date = join_date or datetime.now()
         self.banned = banned
 
