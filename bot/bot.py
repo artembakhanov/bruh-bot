@@ -17,7 +17,7 @@ def get_user_state(session, user_id: int):
 
 @db_write
 def change_user_state(session, user_id: int, new_state: int):
-    user = get_or_create(session, User, id=user_id)
+    user = get_or_create(session, User, id=user_id)[0]
     user.state = new_state
 
 
