@@ -46,12 +46,22 @@ def start_message(not_registered, m):
     bot.send_message(m.chat.id, START_MESSAGE(m.from_user, not_registered), reply_markup=COMMANDS_KEYBOARD(m.chat.type))
 
 
-@bot.message_handler(func=lambda m: m.text in [commands[0], '/bruht'])
+@bot.message_handler(func=lambda m: m.text == commands[0])
 def bruh_message(m):
     bot.send_message(m.chat.id, random.choice(BRUH))
 
 
-@bot.message_handler(func=lambda m: m.text == [commands[1], '/bruh'])
+@bot.message_handler(commands=['bruht'])
+def bruh_message(m):
+    bot.send_message(m.chat.id, random.choice(BRUH))
+
+
+@bot.message_handler(func=lambda m: m.text == commands[1])
+def bruh_audiomessage(m):
+    bot.send_voice(m.chat.id, random_audio())
+
+
+@bot.message_handler(commands=['bruh'])
 def bruh_audiomessage(m):
     bot.send_voice(m.chat.id, random_audio())
 
@@ -98,5 +108,5 @@ def remove(call):
     bot.edit_message_caption("Removed.", chat_id=call.message.chat.id, message_id=call.message.message_id,
                              reply_markup=VERIFY_KEYBOARD(audio_id))
     bot.send_voice(audio.user_id, audio.id,
-                   caption=f"Unfortunately, your bruh *{audio.id[4:]}..{audio_id[:4]}* has not been approved. Try again.",
+                   caption=f"Unfortunately, your bruh *{audio.id[:4]}..{audio_id[:-4]}* has not been approved. Try again.",
                    parse_mode="markdown")
