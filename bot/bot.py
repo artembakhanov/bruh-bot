@@ -22,8 +22,9 @@ def change_user_state(session, user_id: int, new_state: int):
 
 
 @db_write
-def create_audio(session, message):
-    audio = Audio(message.voice.file_id, message.from_user.id)
+def create_audio(session, message, content_type):
+    audio_id = (message.voice if content_type == 'voice' else message.audio).file_id
+    audio = Audio(audio_id, message.from_user.id)
     session.add(audio)
     return audio.id
 
@@ -62,13 +63,12 @@ def bruh_audiomessage(m):
 
 
 def send_for_verification(audio_id):
-    bot.send_voice(ADMIN_GROUP, audio_id)
-    bot.send_message(ADMIN_GROUP, "Verify, please", reply_markup=VERIFY_KEYBOARD(audio_id))
+    bot.send_voice(ADMIN_GROUP, audio_id, "Verify, please", reply_markup=VERIFY_KEYBOARD(audio_id))
 
 
-@bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
+@bot.message_handler(content_types=['voice', 'audio'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
 def record_message(m):
-    audio_id = create_audio(m)
+    audio_id = create_audio(m, m.content_type)
     send_for_verification(audio_id)
     change_user_state(m.from_user.id, DEFAULT_STATE)
     bot.send_message(m.chat.id, RECORDED_MESSAGE, reply_markup=COMMANDS_KEYBOARD)
