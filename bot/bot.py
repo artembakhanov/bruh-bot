@@ -29,12 +29,17 @@ def start_message(not_registered, m):
 
 @bot.message_handler(func=lambda m: m.text == commands[0])
 def bruh_message(m):
-    change_user_state(WAITING_FOR_AUDIO)
     bot.send_message(m.chat.id, random.choice(BRUH))
 
 
 @bot.message_handler(func=lambda m: m.text == commands[1])
+def bruh_message(m):
+    bot.send_message(m.chat.id, random.choice(BRUH))
+
+
+@bot.message_handler(func=lambda m: m.text == commands[2])
 def bruh_audiomessage(m):
+    change_user_state(m.from_user.id, WAITING_FOR_AUDIO)
     bot.send_message(m.chat.id, AUDION_MESSAGE, reply_markup=HIDE_KEYBOARD)
 
 
