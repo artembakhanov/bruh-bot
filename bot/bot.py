@@ -29,7 +29,7 @@ def create_audio(session, message):
 
 @db_write
 def random_audio(session):
-    return random.choice(session.query(Audio).filter_by(verified=True)).id
+    return random.choice(session.query(Audio).filter_by(verified=True).all()).id
 
 
 @bot.message_handler(commands=['start'])
@@ -58,7 +58,7 @@ def bruh_audiomessage(m):
 def record_message(m):
     create_audio(m)
     change_user_state(m.from_user.id, DEFAULT_STATE)
-    bot.send_voice(m.chat.id, m.voice.file_id)
+    bot.send_message(m.chat.id, RECORDED_MESSAGE, reply_markup=COMMANDS_KEYBOARD)
 
 
 @bot.message_handler(func=lambda m: get_user_state(m.from_user.id) == DNE,
