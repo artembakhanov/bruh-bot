@@ -15,10 +15,14 @@ RECORDED_MESSAGE = f"Your bruh has been recorded. It will be made (become) publi
 
 commands = ["bruh", "bruh\U0001F50A", "Record my bruh\U0001F3A4"]
 
-COMMANDS_KEYBOARD = types.ReplyKeyboardMarkup(row_width=2, selective=True)
-COMMANDS_KEYBOARD.add(*commands)
 
-HIDE_KEYBOARD = types.ReplyKeyboardRemove()
+def COMMANDS_KEYBOARD(chat_type):
+    keyboard = types.ReplyKeyboardMarkup(row_width=2, selective=True)
+    keyboard.add(*commands)
+    return keyboard if chat_type == "private" else HIDE_KEYBOARD
+
+
+HIDE_KEYBOARD = types.ReplyKeyboardRemove(selective=True)
 BRUH = ["bruh", "bruhh", "bruuh", "bRuh", "BRUH"]
 
 
