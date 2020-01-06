@@ -62,7 +62,8 @@ def bruh_audiomessage(m):
 
 
 def send_for_verification(audio_id):
-    bot.send_voice(ADMIN_GROUP, audio_id, caption="Verify, please", reply_markup=VERIFY_KEYBOARD(audio_id))
+    bot.send_voice(ADMIN_GROUP, audio_id)
+    bot.send_message(ADMIN_GROUP, "Verify, please", reply_markup=VERIFY_KEYBOARD(audio_id))
 
 
 @bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
