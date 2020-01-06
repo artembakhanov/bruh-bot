@@ -52,13 +52,13 @@ def bruh_message(m):
 
 
 @bot.message_handler(func=lambda m: m.text == commands[1])
-def bruh_message(m):
+def bruh_audiomessage(m):
     bot.send_voice(m.chat.id, random_audio())
 
 
 @bot.message_handler(func=lambda m: m.text == commands[2])
 @create_user
-def bruh_audiomessage(not_registered, m):
+def record_audio_message(not_registered, m):
     change_user_state(m.from_user.id, WAITING_FOR_AUDIO)
     bot.send_message(m.chat.id, AUDION_MESSAGE, reply_markup=HIDE_KEYBOARD)
 
@@ -68,7 +68,7 @@ def send_for_verification(audio_id):
 
 
 @bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
-def record_message(m):
+def recorded_audio_message(m):
     audio_id = create_audio(m)
     send_for_verification(audio_id)
     change_user_state(m.from_user.id, DEFAULT_STATE)
