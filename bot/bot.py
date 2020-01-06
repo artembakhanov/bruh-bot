@@ -6,7 +6,7 @@ from bot.static import *
 from db.classes import User, Audio
 from db.core import create_user, db_read, db_write, get_or_create
 
-bot = telebot.TeleBot(TOKEN)
+bot = telebot.TeleBot(TTOKEN)
 
 
 @db_read

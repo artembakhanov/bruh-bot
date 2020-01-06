@@ -1,0 +1,2 @@
+TOKEN = None
+DATABASE_URL = None
