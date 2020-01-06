@@ -26,4 +26,5 @@ if "webhooks" in list(os.environ.keys()):
     server.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
 
 else:
+    bot.remove_webhook()
     bot.polling()
