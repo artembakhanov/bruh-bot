@@ -1,14 +1,42 @@
-import os
+import random
 
 import telebot
 
 from bot.static import *
-from db.core import create_user
+from db.classes import User
+from db.core import create_user, db_read
 
 bot = telebot.TeleBot(TOKEN)
+
+
+@db_read
+def get_user_state(session, user_id: int):
+    user = session.query(User).filter_by(id=user_id).first()
+    return user.state if user is not None else DNE
 
 
 @bot.message_handler(commands=['start'])
 @create_user
 def start_message(not_registered, m):
     bot.send_message(m.chat.id, START_MESSAGE(m.from_user, not_registered), reply_markup=COMMANDS_KEYBOARD)
+
+
+@bot.message_handler(func=lambda m: m.text == commands[0])
+def bruh_message(m):
+    bot.send_message(m.chat.id, random.choice(BRUH))
+
+
+@bot.message_handler(func=lambda m: m.text == commands[1])
+def bruh_audiomessage(m):
+    bot.send_message(m.chat.id, random.choice(BRUH))
+
+
+@bot.message_handler(content_types=['audio'], func=lambda m: get_user_state(m.from_user.id)==WAITING_FOR_AUDIO)
+def record_message(m):
+    pass
+
+
+@bot.message_handler(func=lambda m: get_user_state(m.from_user.id),
+                     content_types=['audio', 'video', 'document', 'text', 'location', 'contact', 'sticker'])
+def dne_message(m):
+    bot.send_message(m.chat.id, DNE_MESSAGE)
