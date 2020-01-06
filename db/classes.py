@@ -12,12 +12,12 @@ base = declarative_base()
 
 class User(base):
     __tablename__ = "user"
-    user_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     join_date = Column(DateTime)
     banned = Column(Boolean)
 
     def __init__(self, user_id, *, join_date=None, banned=False) -> None:
-        self.user_id = user_id
+        self.id = user_id
         self.join_date = join_date or datetime.now()
         self.banned = banned
 
