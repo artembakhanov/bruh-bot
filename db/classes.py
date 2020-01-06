@@ -39,4 +39,4 @@ class Audio(base):
 
 base.metadata.create_all(engine)
 
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine, expire_on_commit=False)
