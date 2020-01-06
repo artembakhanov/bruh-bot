@@ -23,7 +23,7 @@ def change_user_state(session, user_id: int, new_state: int):
 
 @db_write
 def create_audio(session, message):
-    audio = Audio(message.voice.file_id, message.from_user.id, verified=True)
+    audio = Audio(message.voice.file_id, message.from_user.id)
     session.add(audio)
     return audio.id
 
