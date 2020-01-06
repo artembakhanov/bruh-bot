@@ -25,7 +25,7 @@ def COMMANDS_KEYBOARD(chat_type):
 
 
 HIDE_KEYBOARD = types.ReplyKeyboardRemove(selective=True)
-BRUH = ["bruh", "bruhh", "bruuh", "bRuh", "BRUH"]
+BRUH = ["bruh", "bruhh", "bruuh", "bRuh", "BRUH", "brUh", "BruH", "bbrruuhh", "bruh..."]
 
 
 def VERIFY_KEYBOARD(audio):
