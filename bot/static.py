@@ -1,4 +1,8 @@
+import os
+
 from telebot import types
+
+TOKEN = os.environ["t_token"]
 
 
 def START_MESSAGE(user, not_registered):

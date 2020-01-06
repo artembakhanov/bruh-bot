@@ -5,7 +5,7 @@ import telebot
 from bot.static import *
 from db.core import create_user
 
-bot = telebot.TeleBot(os.environ["t_token"])
+bot = telebot.TeleBot(TOKEN)
 
 
 @bot.message_handler(commands=['start'])
