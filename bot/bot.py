@@ -83,11 +83,13 @@ def dne_message(m):
 def verify(call):
     audio_id = call.data[4:]
     verify_audio(audio_id)
-    bot.edit_message_caption("Verified!", chat_id=call.message.chat.id, message_id=call.message.message_id)
+    bot.edit_message_caption("Verified!", chat_id=call.message.chat.id, message_id=call.message.message_id,
+                             reply_markup=VERIFY_KEYBOARD(audio_id))
 
 
 @bot.callback_query_handler(func=lambda call: call.data[0:4] == "rem_")
 def verify(call):
     audio_id = call.data[4:]
     verify_audio(audio_id)
-    bot.edit_message_caption("Removed.", chat_id= call.message.chat.id, message_id=call.message.message_id)
+    bot.edit_message_caption("Removed.", chat_id=call.message.chat.id, message_id=call.message.message_id,
+                             reply_markup=VERIFY_KEYBOARD(audio_id))
