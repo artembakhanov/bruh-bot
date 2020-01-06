@@ -3,7 +3,7 @@ import random
 import telebot
 
 from bot.static import *
-from db.classes import User
+from db.classes import User, Audio
 from db.core import create_user, db_read, db_write, get_or_create
 
 bot = telebot.TeleBot(TOKEN)
@@ -21,6 +21,17 @@ def change_user_state(session, user_id: int, new_state: int):
     user.state = new_state
 
 
+@db_write
+def create_audio(session, message):
+    audio = Audio(message.voice.file_id, message.from_user.id, verified=True)
+    session.add(audio)
+
+
+@db_write
+def random_audio(session):
+    return random.choice(session.query(Audio).filter_by(verified=True)).id
+
+
 @bot.message_handler(commands=['start'])
 @create_user
 def start_message(not_registered, m):
@@ -34,7 +45,7 @@ def bruh_message(m):
 
 @bot.message_handler(func=lambda m: m.text == commands[1])
 def bruh_message(m):
-    bot.send_message(m.chat.id, random.choice(BRUH))
+    bot.send_voice(m.chat.id, random_audio)
 
 
 @bot.message_handler(func=lambda m: m.text == commands[2])
@@ -45,12 +56,9 @@ def bruh_audiomessage(m):
 
 @bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
 def record_message(m):
-    print(m)
-
-
-@bot.message_handler(content_types=['audio'])
-def record_message(m):
-    pass
+    create_audio(m)
+    change_user_state(m.from_user.id, DEFAULT_STATE)
+    bot.send_voice(m.chat.id, m.voice.file_id)
 
 
 @bot.message_handler(func=lambda m: get_user_state(m.from_user.id) == DNE,
