@@ -46,12 +46,12 @@ def start_message(not_registered, m):
     bot.send_message(m.chat.id, START_MESSAGE(m.from_user, not_registered), reply_markup=COMMANDS_KEYBOARD)
 
 
-@bot.message_handler(func=lambda m: m.text == commands[0])
+@bot.message_handler(func=lambda m: m.text in [commands[0], '/bruht'])
 def bruh_message(m):
     bot.send_message(m.chat.id, random.choice(BRUH))
 
 
-@bot.message_handler(func=lambda m: m.text == commands[1])
+@bot.message_handler(func=lambda m: m.text == [commands[0], '/bruh'])
 def bruh_audiomessage(m):
     bot.send_voice(m.chat.id, random_audio())
 
