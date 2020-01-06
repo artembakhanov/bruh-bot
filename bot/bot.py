@@ -57,7 +57,8 @@ def bruh_message(m):
 
 
 @bot.message_handler(func=lambda m: m.text == commands[2])
-def bruh_audiomessage(m):
+@create_user
+def bruh_audiomessage(not_registered, m):
     change_user_state(m.from_user.id, WAITING_FOR_AUDIO)
     bot.send_message(m.chat.id, AUDION_MESSAGE, reply_markup=HIDE_KEYBOARD)
 
