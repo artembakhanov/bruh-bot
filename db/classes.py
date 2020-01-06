@@ -1,7 +1,6 @@
-import os
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, Boolean, DateTime
+from sqlalchemy import Column, Integer, Boolean, DateTime, ForeignKey
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -24,6 +23,18 @@ class User(base):
         self.join_date = join_date or datetime.now()
         self.banned = banned
         self.state = state
+
+
+class Audio(base):
+    __tablename__ = "audio"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    verified = Column(Boolean, default=False)
+
+    def __init__(self, id, user_id, *, verified=False) -> None:
+        self.id = id
+        self.user_id = user_id
+        self.verified = verified
 
 
 base.metadata.create_all(engine)
