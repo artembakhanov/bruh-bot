@@ -44,7 +44,7 @@ def verify_audio(session, audio_id, verified=True):
 @create_user
 def start_message(not_registered, m):
     bot.send_message(m.chat.id, START_MESSAGE(m.from_user, not_registered), reply_markup=COMMANDS_KEYBOARD(m.chat.type))
-    bot.send_message(m.chat.id, )
+    bot.send_message(m.chat.id, AD_MESSAGE)
 
 
 @bot.message_handler(func=lambda m: m.text == COMMANDS[0])
