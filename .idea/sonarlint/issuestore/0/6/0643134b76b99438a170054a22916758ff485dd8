@@ -1,6 +1,0 @@
-
-upython:S1542
-"VRename function "START_MESSAGE" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(ó°¾…8˜øà€ª.
-~python:S1542"ZRename function "COMMANDS_KEYBOARD" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(¶æ¬ˆøÿÿÿÿ8˜øà€ª.
-|python:S1542"XRename function "CANCEL_KEYBOARD" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(Ÿ…ÿ†øÿÿÿÿ8˜øà€ª.
-|python:S1542'"XRename function "VERIFY_KEYBOARD" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(‰Ø¸åùÿÿÿÿ8˜øà€ª.
