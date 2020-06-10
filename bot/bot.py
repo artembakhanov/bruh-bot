@@ -25,6 +25,7 @@ def change_user_state(session, user_id: int, new_state: int):
 def create_audio(session, message):
     audio = Audio(message.voice.file_id, message.from_user.id)
     session.add(audio)
+    session.commit()
 
     audio_id = AudioID(real_id=audio.id)
     session.add(audio_id)
