@@ -38,6 +38,12 @@ class Audio(base):
         self.verified = verified
 
 
+class AudioID(base):
+    __tablename__ = "audio_id"
+    id = Column(Integer, primary_key=True)
+    real_id = Column(String, ForeignKey("audio.id"))
+
+
 base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine, expire_on_commit=False)

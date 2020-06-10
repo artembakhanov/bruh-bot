@@ -2,7 +2,7 @@ flask
 certifi==2019.11.28
 chardet==3.0.4
 idna==2.8
-pyTelegramBotAPI==3.6.6
+pyTelegramBotAPI==3.7.1
 requests==2.22.0
 six==1.13.0
 SQLAlchemy==1.3.12

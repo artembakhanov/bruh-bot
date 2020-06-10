@@ -3,7 +3,7 @@ import random
 import telebot
 
 from bot.static import *
-from db.classes import User, Audio
+from db.classes import User, Audio, AudioID
 from db.core import create_user, db_read, db_write, get_or_create
 
 bot = telebot.TeleBot(TTOKEN)
@@ -25,7 +25,11 @@ def change_user_state(session, user_id: int, new_state: int):
 def create_audio(session, message):
     audio = Audio(message.voice.file_id, message.from_user.id)
     session.add(audio)
-    return audio.id
+
+    audio_id = AudioID(real_id=audio.id)
+    session.add(audio_id)
+    session.commit()
+    return audio.id, audio_id.id
 
 
 @db_read
@@ -38,6 +42,12 @@ def verify_audio(session, audio_id, verified=True):
     audio = session.query(Audio).filter_by(id=audio_id).first()
     audio.verified = verified
     return audio
+
+
+@db_read
+def get_real_id(session, id):
+    audio_id = session.query(AudioID).filter_by(id=id).first()
+    return audio_id.real_id
 
 
 @bot.message_handler(commands=['start'])
@@ -80,14 +90,14 @@ def cancel_recording_audio_message(m):
     bot.send_message(m.chat.id, random.choice(BRUH), reply_markup=COMMANDS_KEYBOARD(m.chat.type))
 
 
-def send_for_verification(audio_id):
-    bot.send_voice(ADMIN_GROUP, audio_id, "Verify, please", reply_markup=VERIFY_KEYBOARD(audio_id))
+def send_for_verification(real_id, audio_id):
+    bot.send_voice(ADMIN_GROUP, real_id, "Verify, please", reply_markup=VERIFY_KEYBOARD(audio_id))
 
 
 @bot.message_handler(content_types=['voice'], func=lambda m: get_user_state(m.from_user.id) == WAITING_FOR_AUDIO)
 def recorded_audio_message(m):
-    audio_id = create_audio(m)
-    send_for_verification(audio_id)
+    real_id, audio_id = create_audio(m)
+    send_for_verification(real_id, audio_id)
     change_user_state(m.from_user.id, DEFAULT_STATE)
     bot.send_message(m.chat.id, RECORDED_MESSAGE, reply_markup=COMMANDS_KEYBOARD(m.chat.type))
 
@@ -101,22 +111,32 @@ def dne_message(m):
 @bot.callback_query_handler(func=lambda call: call.data[0:4] == "ver_")
 def verify(call):
     audio_id = call.data[4:]
-    audio = verify_audio(audio_id)
-    bot.edit_message_caption("Verified!", chat_id=call.message.chat.id, message_id=call.message.message_id,
-                             reply_markup=VERIFY_KEYBOARD(audio_id))
-    bot.send_voice(audio.user_id, audio.id, caption=f"Your bruh *{audio.id[:4]}..{audio_id[-4:]}* has been approved!",
-                   parse_mode="markdown")
+    real_id = get_real_id(audio_id)
+    audio = verify_audio(real_id)
+    try:
+        bot.edit_message_caption("Verified!", chat_id=call.message.chat.id, message_id=call.message.message_id,
+                                 reply_markup=VERIFY_KEYBOARD(audio_id))
+        bot.send_voice(audio.user_id, audio.id,
+                       caption=f"Your bruh *{audio.id[:4]}..{audio_id[-4:]}* has been approved!",
+                       parse_mode="markdown")
+    except:
+        pass
 
 
 @bot.callback_query_handler(func=lambda call: call.data[0:4] == "rem_")
 def remove(call):
     audio_id = call.data[4:]
-    audio = verify_audio(audio_id, False)
-    bot.edit_message_caption("Removed.", chat_id=call.message.chat.id, message_id=call.message.message_id,
-                             reply_markup=VERIFY_KEYBOARD(audio_id))
-    bot.send_voice(audio.user_id, audio.id,
-                   caption=f"Unfortunately, your bruh *{audio.id[:4]}..{audio_id[-4:]}* has not been approved. Try again.",
-                   parse_mode="markdown")
+    real_id = get_real_id(audio_id)
+    audio = verify_audio(real_id, False)
+
+    try:
+        bot.edit_message_caption("Removed.", chat_id=call.message.chat.id, message_id=call.message.message_id,
+                                 reply_markup=VERIFY_KEYBOARD(audio_id))
+        bot.send_voice(audio.user_id, audio.id,
+                       caption=f"Unfortunately, your bruh *{audio.id[:4]}..{audio_id[-4:]}* has not been approved. Try again.",
+                       parse_mode="markdown")
+    except:
+        pass
 
 
 @bot.inline_handler(func=lambda query: True)
