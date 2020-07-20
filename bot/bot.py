@@ -143,5 +143,9 @@ def remove(call):
 @bot.inline_handler(func=lambda query: True)
 def inline(query):
     audio_id = random_audio()
-    res = types.InlineQueryResultCachedVoice(audio_id, audio_id, "bruh", parse_mode="markdown")
-    bot.answer_inline_query(query.id, [res], cache_time=0)
+    res1 = types.InlineQueryResultCachedVoice(1, audio_id, "bruh", parse_mode="markdown")
+    res2 = types.InlineQueryResultArticle(2, "Help", description="Send guidelines to this chat",
+                                          input_message_content=types.InputTextMessageContent(
+                                              "Write @br_uh_bot into textbox below and you will be offered bruh sound. You can type something if you do not like the offered bruh. \n\nAlso you can record your own bruh. Text me: @br_uh_bot!"),
+                                          thumb_url="https://img.favpng.com/2/1/2/question-mark-stock-photography-clip-art-png-favpng-xX0CH6YBvYeU89gtDZMqYQQJE.jpg")
+    bot.answer_inline_query(query.id, [res1, res2], cache_time=0)
